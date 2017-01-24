@@ -1,0 +1,17 @@
+{
+  "name": "slack-foosball-referee",
+  "version": "1.0.0",
+  "description": "Slack bot for organising doubles games of Foosball",
+  "main": "foosball.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "foosball"
+  ],
+  "author": "Rory Haddon",
+  "license": "MIT",
+  "dependencies": {
+    "@slack/client": "^3.8.1"
+  }
+}
