@@ -32,7 +32,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(msg) {
         return msgOps.commands[command].regex.test(userCommand);
       });
       if (matchedCommand) {
-        console.log(`Matched command: ${matchedCommand}`);
+        //console.log(`Matched command: ${matchedCommand}`);
         msgOps.commands[matchedCommand].handler.call(null, rtm, msg, rtmConfig);
       }
     }
@@ -43,9 +43,11 @@ function isThisMessageForMe(msg) {
 }
 
 function getCommand(msg) {
-  const match = msg.text.match(commandMatcher);
-
-  if (match === null) {
+  let match;
+  if (msg.text) {
+    match = msg.text.match(commandMatcher);
+  }
+  if (!match) {
     return '--help';
   }
   return match && match[0];
