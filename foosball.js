@@ -26,8 +26,12 @@ rtm.on(RTM_EVENTS.MESSAGE, function(msg) {
     if (msg.subtype && msg.subtype === 'subtype_changed') {
       msg = msg.message;
     }
-    const userCommand = getCommand(msg);
-    if (isThisMessageForMe(msg) && userCommand) {
+    let userCommand = getCommand(msg);
+
+    if (isThisMessageForMe(msg) || isBotInThisChannel(msg.channel) && userCommand) {
+      if (!userCommand) {
+        userCommand = '--help';
+      }
       const matchedCommand = Object.keys(msgOps.commands).find(function(command) {
         return msgOps.commands[command].regex.test(userCommand);
       });
@@ -37,6 +41,12 @@ rtm.on(RTM_EVENTS.MESSAGE, function(msg) {
       }
     }
 });
+
+function isBotInThisChannel(channelId) {
+  return (rtmConfig.channels.find(function(chnl) {
+    return chnl.id === channelId;
+  })) ? true : false;
+}
 
 function isThisMessageForMe(msg) {
   return selfMatcher.test(msg.text);
@@ -48,7 +58,7 @@ function getCommand(msg) {
     match = msg.text.match(commandMatcher);
   }
   if (!match) {
-    return '--help';
+    return false;
   }
   return match && match[0];
 }
